@@ -10,6 +10,8 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddCors(); //Prevent cors policy error
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi(); //Not covered
 
@@ -24,6 +26,11 @@ var app = builder.Build();
 //app.UseHttpsRedirection(); // Not used
 
 //app.UseAuthorization(); // Not used
+
+app.UseCors( opt =>
+{
+    opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000");
+});
 
 app.MapControllers();
 
