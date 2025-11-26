@@ -1,22 +1,16 @@
-import { useEffect, useState } from "react";
-import type { Product } from "../../app/models/product";
 import { useParams } from "react-router-dom";
 import { Button, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material"; //Using Grid 2
+import { useFetchProductDetailsQuery } from "./catalogAPi";
 
 export default function ProductDetails() {
 
     const {id} = useParams();
-    const [product, setProduct] = useState<Product | null>(null);
 
-    useEffect(()=> {
-        fetch(`https://localhost:5001/api/products/${id}`)
-        .then(Response => Response.json())
-        .then(data => setProduct(data))
-        .catch(error => console.log(error))
-    }, [id]) //if id changes, useeffect gets executed and synchronize effectively with api server
+    const {data: product, isLoading} = useFetchProductDetailsQuery(id ? +id : 0) // +id is same as parseInt(id)!
 
 
-        if (!product) return <div>Loading...</div>
+
+    if (!product || isLoading) return <div>Loading...</div>
 
         const productDetails = [
             {label:'Name', value: product.name},
