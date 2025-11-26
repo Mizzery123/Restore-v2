@@ -1,4 +1,5 @@
 using API.Data;
+using API.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,8 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 });
 
 builder.Services.AddCors(); //Prevent cors policy error
+builder.Services.AddTransient<ExceptionMiddleware>();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi(); //Not covered
 
@@ -26,6 +29,8 @@ var app = builder.Build();
 //app.UseHttpsRedirection(); // Not used
 
 //app.UseAuthorization(); // Not used
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors( opt =>
 {
