@@ -1,3 +1,5 @@
+// Test controller to purposely return different errors to test how the API and client handles them
+
 using System;
 using Microsoft.AspNetCore.Mvc;
 

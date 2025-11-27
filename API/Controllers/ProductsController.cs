@@ -1,3 +1,5 @@
+// handles API calls to get all products or a single product from the database.
+
 using API.Data;
 using API.Entities;
 using Microsoft.AspNetCore.Http;
