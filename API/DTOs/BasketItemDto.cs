@@ -1,3 +1,4 @@
+// Shaping the json data sent from API to frontend, helps control what data to send to frontend
 namespace API.DTOs;
 
 public class BasketItemDto

@@ -1,3 +1,4 @@
+//Backend logic of shopping basket. Lets the server add item, remove items, look up items
 using System;
 
 namespace API.Entities;

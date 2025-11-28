@@ -1,21 +1,25 @@
+// Defines an API slice using RTK Query to manage shopping basket in the app
+
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithErrorHandling } from "../../app/api/baseApi";
 import { Item, type Basket } from "../../app/models/basket";
 import type { Product } from "../../app/models/product";
 
 function isBasketItem(product: Product | Item): product is Item{
-    return (product as Item).quantity !== undefined; //If a basket item, will have quantity property. If product, will be undefined
+    return (product as Item).quantity !== undefined; //A typeguard: If a basket item, will have quantity property. If product, will be undefined
 }
 
 export const basketApi = createApi({
-    reducerPath: 'basketApi',
-    baseQuery: baseQueryWithErrorHandling,
-    tagTypes: ['Basket'],
+    reducerPath: 'basketApi', // Name of slice in Redux store
+    baseQuery: baseQueryWithErrorHandling, //Handle API calls with error handling
+    tagTypes: ['Basket'], // Invalidate cached data when needed
     endpoints: (builder) => ({
+        //1st endpoint: Fetch current basket, tagged with 'Basket' tag so cached data can be invalidated when basket changes
         fetchBasket: builder.query<Basket, void>({
             query: () => 'basket',
             providesTags: ['Basket']
         }),
+        //2nd endpoint: Adds new basket item with optimistic update (instant) by editing cached basket instantly. Changes can be undo if API fails
         addBasketItem: builder.mutation<Basket, {product: Product | Item, quantity: number}>({
             query: ({product, quantity}) => {
                 const productId = isBasketItem(product) ? product.productId : product.id; //type guard
@@ -51,6 +55,7 @@ export const basketApi = createApi({
                 }
             }
         }),
+        //3rd endpoint: Remove a basket item with optimistic update. Changes can be undo if API fails
         removeBasketItem: builder.mutation<Basket, {productId: number, quantity: number}>({
             query: ({productId, quantity}) => ({
                 url: `basket?productId=${productId}&quantity=${quantity}`,
@@ -79,4 +84,6 @@ export const basketApi = createApi({
     })
 });
 
+// React Hooks to use these operations (Get Basket, Add Basket Item, Remove Basket Item) in other components!
+// Note: RTK Query always include data + with other properties (not defined) like isLoading, isFetching etc.
 export const {useFetchBasketQuery, useAddBasketItemMutation, useRemoveBasketItemMutation} = basketApi;

@@ -1,3 +1,6 @@
+// Handles all API requests related to shopping basket
+// Allows frontend to get current basket, add items to basket and remove/reduce items in basket
+// Each basket is identified using cookie, loads this basket data from db and returns clean json data with DTO
 using System;
 using API.Data;
 using API.DTOs;
@@ -9,9 +12,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-public class BasketController(StoreContext context) : BaseApiController //Also need to inject store context in the controller!
+public class BasketController(StoreContext context) : BaseApiController //Need to inject store context in the controller to access db!
 {
-    [HttpGet] //Define an api endpoint!
+    [HttpGet] //Define an api endpoint to get basket!
     public async Task<ActionResult<BasketDto>> GetBasket()
     {
         var basket = await RetrieveBasket();
@@ -21,8 +24,8 @@ public class BasketController(StoreContext context) : BaseApiController //Also n
         return basket.ToDto();
     }
 
-    [HttpPost]
-    public async Task<ActionResult<BasketDto>> AddItemToBasket(int productId, int quantity) //Does not need to return anything
+    [HttpPost]//2nd api endpoint to add item to basket
+    public async Task<ActionResult<BasketDto>> AddItemToBasket(int productId, int quantity)
     {
         //get basket
         var basket = await RetrieveBasket();
@@ -43,7 +46,7 @@ public class BasketController(StoreContext context) : BaseApiController //Also n
 
 
 
-    [HttpDelete]
+    [HttpDelete] //3rd api endpoint to remove/reduce item from basket
     public async Task<ActionResult> RemoveBasketItem(int productId, int quantity)
     {
         //get basket
@@ -59,7 +62,7 @@ public class BasketController(StoreContext context) : BaseApiController //Also n
         return BadRequest("Problem updating basket");
     }
 
-
+    //Loads the full basket with product details
     private async Task<Basket?> RetrieveBasket() //? means can return null for this method
     {
         return await context.Baskets
@@ -68,7 +71,7 @@ public class BasketController(StoreContext context) : BaseApiController //Also n
             .FirstOrDefaultAsync(x => x.BasketId == Request.Cookies["basketId"]);
     }
 
-    private Basket CreateBasket() // Ensure there is no ? after Basket as if called, must create a basket!
+    private Basket CreateBasket() // Always returns a Basket, so its return type must NOT be nullable. (Can't use ?)
     {
         var basketId = Guid.NewGuid().ToString();
         var cookieOptions = new CookieOptions

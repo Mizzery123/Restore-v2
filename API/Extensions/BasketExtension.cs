@@ -6,7 +6,7 @@ namespace API.Extensions;
 
 public static class BasketExtension
 {
-    public static BasketDto ToDto(this Basket basket) // basket.ToDto()
+    public static BasketDto ToDto(this Basket basket) // basket.ToDto() - A helper method for Basket class to avoid repetition
     {
         return new BasketDto
         {

@@ -5,7 +5,7 @@ import type { Item } from "../../models/basket";
 import { Link } from "react-router";
 
 export default function OrderSummary() {
-    const {data: basket} = useFetchBasketQuery();
+    const {data: basket} = useFetchBasketQuery(); // Take only data property from returned object and stored in 'basket' variable
     //If the basket exists, add up quantity * price for all items. If there’s no basket, subtotal is 0.
     const subtotal = basket?.items.reduce((sum: number, item: Item) => sum + item.quantity * item.price, 0) ?? 0; 
     const deliveryFee = subtotal > 10000 ? 0 : 500;

@@ -31,7 +31,7 @@ export default function NavBar() {
   const {isLoading, darkMode} = useAppSelector(state => state.ui);
   const dispatch = useAppDispatch();
   const {data: basket} = useFetchBasketQuery();
-
+  //Go through every item in the basket and add their quantity starting from 0. If result is undefined or null, set to 0 as default
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0) || 0;
 
   return (

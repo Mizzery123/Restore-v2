@@ -1,8 +1,10 @@
+// Centralizes all API request logic to avoid repetition
 import { fetchBaseQuery, type BaseQueryApi, type FetchArgs } from "@reduxjs/toolkit/query";
 import { startLoading, stopLoading } from "../layout/uiSlice";
 import { toast } from "react-toastify";
 import { router } from "../routes/Routes";
 
+// Setup base query
 const customBaseQuery = fetchBaseQuery({
     baseUrl: 'https://localhost:5001/api',
     credentials: 'include' //Include cookies with each request
@@ -10,8 +12,9 @@ const customBaseQuery = fetchBaseQuery({
 
 type ErrorResponse = | string | {title: string} | {errors: string[]}
 
-const sleep = () => new Promise(resolve => setTimeout(resolve, 1000)); // Delay of 1000 miliseconds
+const sleep = () => new Promise(resolve => setTimeout(resolve, 1000)); // Delay of 1000 miliseconds to see loading UI clearly
 
+// Error handling wrapper: Wraps every api request with start/stop loading actions
 export const baseQueryWithErrorHandling = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
     //start loading
     api.dispatch(startLoading());
@@ -19,6 +22,7 @@ export const baseQueryWithErrorHandling = async (args: string | FetchArgs, api: 
     const result = await customBaseQuery(args, api, extraOptions);
     //stop loading
     api.dispatch(stopLoading());
+    // Handling different error response from toast messages to redirect to another page
     if (result.error){
         const originalStatus=  result.error.status === 'PARSING_ERROR' && result.error.originalStatus
         ? result.error.originalStatus : result.error.status

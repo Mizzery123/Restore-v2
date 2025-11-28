@@ -1,3 +1,4 @@
+// Defines one entry in the shopping basket
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entities;
