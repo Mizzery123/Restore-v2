@@ -13,6 +13,11 @@ import CheckoutPage from "../../features/checkout/CheckoutPage";
 import LoginForm from "../../features/account/LoginForm";
 import RegisterForm from "../../features/account/RegisterForm";
 import RequireAuth from "./RequireAuth";
+import OrderConfirmation from "../../features/orders/OrderConfirmation";
+import OrderDetail from "../../features/orders/orderDetail";
+import OrderHistory from "../../features/orders/orderHistory";
+
+
 
 export const router = createBrowserRouter([
     {
@@ -32,6 +37,9 @@ export const router = createBrowserRouter([
             {path: 'login', element: <LoginForm />},
             {path: 'register', element: <RegisterForm />},
             {path: 'not-found', element: <NotFound />},
+            {path: "/order-confirmation/:id", element: <OrderConfirmation />},
+            {path: "/orders/:id", element: <OrderDetail />},
+            {path: "/orders", element: <OrderHistory />},
             {path: '*', element: <Navigate replace to='/not-found'/>} //For any other links will be redirected
         ]
     }
