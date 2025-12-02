@@ -8,6 +8,7 @@ import { basketApi } from "../../features/basket/basketApi";
 import { catalogSlice } from "../../features/catalog/catalogSlice";
 import { accountApi } from "../../features/account/accountApi";
 import { orderApi } from "../../features/orders/orderApi";
+import { adminApi } from "../../features/admin/adminApi";
 
 export function configureTheStore(){
     return legacy_createStore(counterReducer)
@@ -20,12 +21,13 @@ export const store = configureStore({
         [basketApi.reducerPath]: basketApi.reducer,
         [accountApi.reducerPath]: accountApi.reducer,
         [orderApi.reducerPath]: orderApi.reducer,
+        [adminApi.reducerPath]: adminApi.reducer,
         counter: counterSlice.reducer,
         ui: uiSlice.reducer,
         catalog: catalogSlice.reducer
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(catalogApi.middleware, errorApi.middleware, basketApi.middleware, accountApi.middleware, orderApi.middleware)
+        getDefaultMiddleware().concat(catalogApi.middleware, errorApi.middleware, basketApi.middleware, accountApi.middleware, orderApi.middleware, adminApi.middleware)
 })
 
 export type RootState = ReturnType<typeof store.getState>

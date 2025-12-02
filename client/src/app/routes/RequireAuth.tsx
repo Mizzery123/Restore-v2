@@ -13,6 +13,14 @@ export default function RequireAuth() {
         return <Navigate to='/login' state={{from: location}} />
     }
 
+    const adminRoutes = [
+      '/inventory',
+      '/admin-dashboard' //Not created just for example for more than 1 admin route!
+    ]
+
+    if (adminRoutes.includes(location.pathname) && !user.roles.includes('Admin')){
+      return <Navigate to='/' replace/> //replace instead of push so clicking back will not allow them to back admin pages!
+    }
 
   return (
     <Outlet />

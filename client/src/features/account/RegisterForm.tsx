@@ -18,7 +18,7 @@ export default function RegisterForm() {
     const onSubmit = async (data: RegisterSchema) => {
         try {
             await registerUser(data).unwrap();
-        } catch (error) {
+        } catch (error) { //Handle validation error
             const apiError = error as { message: string };
             if (apiError.message && typeof apiError.message === 'string') {
                 const errorArray = apiError.message.split(',');

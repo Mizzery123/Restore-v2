@@ -20,7 +20,7 @@ export default function LoginForm() {
     const onSubmit = async (data: LoginSchema) => {
         await login(data);
         await fetchUserInfo();
-        navigate(location.state.from || '/catalog'); //Send user back to where they came from or default catalog
+        navigate(location.state?.from || '/catalog');//Send user back to where they came from or default catalog
     }
 
     return (
