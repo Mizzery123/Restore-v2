@@ -19,11 +19,12 @@ public class DbInitializer
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>() 
             ?? throw new InvalidOperationException("Failed to retrieve user manager");
 
-        SeedData(context, userManager);
+        SeedData(context, userManager); // Add await if error happens in SQL Server, SQLite works fine here!
 
 
     }
 
+// Return Task instead of void if error happens in SQL Server, SQLite works fine here!
     private static async void SeedData(StoreContext context, UserManager<User> userManager) //Static as doesn't depend on anything else, use this class without creating a new instance of this class
     {
         context.Database.Migrate(); //Check pending migrations, create db if dh and apply any pending migrations
